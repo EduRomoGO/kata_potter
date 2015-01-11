@@ -10,7 +10,7 @@ RSpec.describe "Potter books price calculator" do
     expect( Potter_shopping_basket.new(0,0,0,0,1).calculate_books_price ).to eq(8) 
   end
 
-  it "charges the price of two books if you buy two equal books" do
+  it "charges the price of n books if you buy n equal books" do
     expect( Potter_shopping_basket.new(0,0,0,0,9).calculate_books_price ).to eq(72) 
   end
 
@@ -24,6 +24,10 @@ RSpec.describe "Potter books price calculator" do
   
   it "charges the price of three books with 10% discount if you buy 3 different books" do
     expect( Potter_shopping_basket.new(0,1,0,1,1).calculate_books_price ).to eq(21.60)
+  end
+
+  it "selects the combination of discounts to get the highest discount possible" do
+    expect( Potter_shopping_basket.new(2,1,2,2,1).calculate_books_price ).to eq(51.20)
   end
 
 end

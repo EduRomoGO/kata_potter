@@ -65,21 +65,20 @@ class Potter_shopping_basket
 
   def calculate_price_when_discount_applies books_list_to_buy, number_of_books, different_books_counter
 
-      total_price = 0
-      books_list_ordered = books_list_to_buy.sort
-      if different_books_counter == 2
-        pack_of_books_to_apply_discount_of_2 = books_list_ordered[0]*2
-        pack_of_books_normal_price = number_of_books - pack_of_books_to_apply_discount_of_2
-        total_price =  (pack_of_books_to_apply_discount_of_2 * BOOK_PRICE) * 0.95 + pack_of_books_normal_price * BOOK_PRICE
-      elsif different_books_counter == 3
-        pack_of_books_to_apply_discount_of_3 = books_list_ordered[0]*3
-        pack_of_books_normal_price = number_of_books - pack_of_books_to_apply_discount_of_3
-        total_price =  (pack_of_books_to_apply_discount_of_3 * BOOK_PRICE) * 0.90 + pack_of_books_normal_price * BOOK_PRICE
-      end
-      total_price
-     
+    total_price = 0
+    books_list_ordered = books_list_to_buy.sort
+    if different_books_counter == 2
+      pack_of_books_to_apply_discount_of_2 = books_list_ordered[0]*2
+      pack_of_books_normal_price = number_of_books - pack_of_books_to_apply_discount_of_2
+      total_price =  (pack_of_books_to_apply_discount_of_2 * BOOK_PRICE) * 0.95 + pack_of_books_normal_price * BOOK_PRICE
+    elsif different_books_counter == 3
+      pack_of_books_to_apply_discount_of_3 = books_list_ordered[0]*3
+      pack_of_books_normal_price = number_of_books - pack_of_books_to_apply_discount_of_3
+      total_price =  (pack_of_books_to_apply_discount_of_3 * BOOK_PRICE) * 0.90 + pack_of_books_normal_price * BOOK_PRICE
+    end
 
   end
+
 
 
 end
