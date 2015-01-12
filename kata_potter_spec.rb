@@ -2,7 +2,7 @@ require './potter_shopping_basket'
 
 RSpec.describe "Potter books price calculator" do
 
-  let(:packages_selector) {packages_selector = Packages_selector.new}
+  let(:packages_selector) {packages_selector = Packages_selector.new(Books_list_operations.new)}
 
   it "charges 0 if you don´t buy any book" do
     expect( Potter_shopping_basket.new(0,0,0,0,0,packages_selector).calculate_books_price ).to eq(0) 
@@ -26,6 +26,10 @@ RSpec.describe "Potter books price calculator" do
   
   it "charges the price of three books with 10% discount if you buy 3 different books" do
     expect( Potter_shopping_basket.new(0,1,0,1,1,packages_selector).calculate_books_price ).to eq(21.60)
+  end
+
+  it "apply 20% discount if you buy 4 different books" do
+    expect( Potter_shopping_basket.new(1,1,0,1,1,packages_selector).calculate_books_price ).to eq(25.60)
   end
 
   it "selects the combination of discounts to get the highest discount possible" do

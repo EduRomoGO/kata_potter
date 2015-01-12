@@ -33,17 +33,14 @@ class Potter_shopping_basket
   end
 
   def calculate_books_price
-
     number_of_books = @first + @second + @third + @fourth + @fifth
     books_list = [@first, @second, @third, @fourth, @fifth]
 
+    highests_discounts_sets_of_books = 
+    @packages_selector.create_books_packages_with_highest_total_discount books_list
     
-
-    sets_of_books = @packages_selector.create_books_packages_with_highest_total_discount books_list
-    calculate_total_amount sets_of_books
+    calculate_total_amount highests_discounts_sets_of_books
   end
-
-
 
   def calculate_total_amount sets_of_books
     (sets_of_books[0] + sets_of_books[1]*0.95*2 + sets_of_books[2]*0.90*3 + 
