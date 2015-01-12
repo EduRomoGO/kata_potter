@@ -38,12 +38,9 @@ class Potter_shopping_basket
     books_list_to_buy = []
     different_books_counter = count_different_books books_list, books_list_to_buy
 
-    if books_list_elegible_for_discount? different_books_counter
-      calculate_price_when_discount_applies books_list_to_buy, number_of_books, different_books_counter
-    else
-      number_of_books * BOOK_PRICE       
-    end
-
+    sets_of_books = create_books_packages_with_highest_total_discount books_list_to_buy, different_books_counter
+    #binding.pry
+    calculate_total_amount sets_of_books
   end
 
   def count_different_books books_list, books_list_to_buy
@@ -54,31 +51,53 @@ class Potter_shopping_basket
         books_list_to_buy.push(number_of_copies_of_the_book)
       end
     end
-    different_books_counter
+    return different_books_counter
   end
 
 
-  def books_list_elegible_for_discount? different_books_counter
-    if (different_books_counter == 2 or different_books_counter == 3) then true else false end
+  def calculate_total_amount sets_of_books
+    #binding.pry
+    (sets_of_books[0] + sets_of_books[1]*0.95*2 + sets_of_books[2]*0.90*3 + sets_of_books[3]*0.80*4 + sets_of_books[4]*0.75*5)*BOOK_PRICE
   end
 
 
-  def calculate_price_when_discount_applies books_list_to_buy, number_of_books, different_books_counter
+  def create_books_packages_with_highest_total_discount books_list_to_buy, different_books_counter
+    sets_of_books = [0,0,0,0,0]
 
-    total_price = 0
-    books_list_ordered = books_list_to_buy.sort
-    if different_books_counter == 2
-      pack_of_books_to_apply_discount_of_2 = books_list_ordered[0]*2
-      pack_of_books_normal_price = number_of_books - pack_of_books_to_apply_discount_of_2
-      total_price =  (pack_of_books_to_apply_discount_of_2 * BOOK_PRICE) * 0.95 + pack_of_books_normal_price * BOOK_PRICE
-    elsif different_books_counter == 3
-      pack_of_books_to_apply_discount_of_3 = books_list_ordered[0]*3
-      pack_of_books_normal_price = number_of_books - pack_of_books_to_apply_discount_of_3
-      total_price =  (pack_of_books_to_apply_discount_of_3 * BOOK_PRICE) * 0.90 + pack_of_books_normal_price * BOOK_PRICE
+    while different_books_counter != 0
+      empty_list = []
+      if different_books_counter == 1
+        sets_of_books[0] = books_list_to_buy[0]
+        different_books_counter = 0
+      else
+        books_list_to_buy = pick_set_of_books books_list_to_buy
+
+        sets_of_books[(different_books_counter.to_i-1).to_i]=((sets_of_books[different_books_counter-1].to_i)+1).to_i
+        
+        different_books_counter = count_different_books books_list_to_buy, empty_list
+      end
     end
 
+    while sets_of_books[4] != 0 and sets_of_books[2] != 0
+      sets_of_books[4] = sets_of_books[4]-1
+      sets_of_books[2] = sets_of_books[2]-1
+      sets_of_books[3] += 2
+    end
+
+    sets_of_books
   end
 
+  def pick_set_of_books books_list_to_buy
+    rest_of_books_list = []
+    
+    books_list_to_buy.each do |book|
+      if book-1 != 0
+        rest_of_books_list.push(book-1)
+      end
+    end
+
+    return rest_of_books_list
+  end
 
 
 end
