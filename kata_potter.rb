@@ -35,20 +35,29 @@ class Potter_shopping_basket
     number_of_books = @first + @second + @third + @fourth + @fifth
     books_list = [@first, @second, @third, @fourth, @fifth]
 
-    books_list_to_buy = []
-    different_books_counter = count_different_books books_list, books_list_to_buy
+    books_list_to_buy = remove_empty_book_types_from_books_list books_list
+
+    different_books_counter = count_different_books books_list_to_buy
 
     sets_of_books = create_books_packages_with_highest_total_discount books_list_to_buy, different_books_counter
-    #binding.pry
     calculate_total_amount sets_of_books
   end
 
-  def count_different_books books_list, books_list_to_buy
+  def remove_empty_book_types_from_books_list books_list
+    books_list_to_buy = []
+    books_list.each do |number_of_copies_of_the_book|
+      if number_of_copies_of_the_book != 0
+        books_list_to_buy.push(number_of_copies_of_the_book)
+      end
+    end
+    return books_list_to_buy
+  end
+
+  def count_different_books books_list_to_buy
     different_books_counter = 0
-     books_list.each do |number_of_copies_of_the_book|
+     books_list_to_buy.each do |number_of_copies_of_the_book|
       if number_of_copies_of_the_book != 0
         different_books_counter += 1
-        books_list_to_buy.push(number_of_copies_of_the_book)
       end
     end
     return different_books_counter
@@ -56,7 +65,6 @@ class Potter_shopping_basket
 
 
   def calculate_total_amount sets_of_books
-    #binding.pry
     (sets_of_books[0] + sets_of_books[1]*0.95*2 + sets_of_books[2]*0.90*3 + sets_of_books[3]*0.80*4 + sets_of_books[4]*0.75*5)*BOOK_PRICE
   end
 
@@ -74,7 +82,7 @@ class Potter_shopping_basket
 
         sets_of_books[(different_books_counter.to_i-1).to_i]=((sets_of_books[different_books_counter-1].to_i)+1).to_i
         
-        different_books_counter = count_different_books books_list_to_buy, empty_list
+        different_books_counter = count_different_books books_list_to_buy
       end
     end
 
