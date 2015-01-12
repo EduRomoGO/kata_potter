@@ -1,4 +1,4 @@
-require './kata_potter'
+require './potter_shopping_basket'
 
 RSpec.describe "Potter books price calculator" do
 

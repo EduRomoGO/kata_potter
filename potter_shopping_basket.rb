@@ -37,13 +37,21 @@ class Potter_shopping_basket
     number_of_books = @first + @second + @third + @fourth + @fifth
     books_list = [@first, @second, @third, @fourth, @fifth]
 
-    
+    books_list_to_buy = remove_empty_book_types_from_books_list books_list
 
-    sets_of_books = @packages_selector.create_books_packages_with_highest_total_discount books_list
+    sets_of_books = @packages_selector.create_books_packages_with_highest_total_discount books_list_to_buy
     calculate_total_amount sets_of_books
   end
 
-
+  def remove_empty_book_types_from_books_list books_list
+    books_list_to_buy = []
+    books_list.each do |number_of_copies_of_the_book|
+      if number_of_copies_of_the_book != 0
+        books_list_to_buy.push(number_of_copies_of_the_book)
+      end
+    end
+    books_list_to_buy
+  end
 
   def calculate_total_amount sets_of_books
     (sets_of_books[0] + sets_of_books[1]*0.95*2 + sets_of_books[2]*0.90*3 + 
