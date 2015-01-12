@@ -22,7 +22,8 @@ class Potter_shopping_basket
 
   BOOK_PRICE = 8
 
-  def initialize first, second, third, fourth, fifth
+  def initialize first, second, third, fourth, fifth, packages_selector
+    @packages_selector = packages_selector
     @first = first
     @second = second
     @third = third
@@ -37,9 +38,7 @@ class Potter_shopping_basket
 
     books_list_to_buy = remove_empty_book_types_from_books_list books_list
 
-    different_books_counter = count_different_books books_list_to_buy
-
-    sets_of_books = create_books_packages_with_highest_total_discount books_list_to_buy, different_books_counter
+    sets_of_books = @packages_selector.create_books_packages_with_highest_total_discount books_list_to_buy
     calculate_total_amount sets_of_books
   end
 
@@ -50,8 +49,17 @@ class Potter_shopping_basket
         books_list_to_buy.push(number_of_copies_of_the_book)
       end
     end
-    return books_list_to_buy
+    books_list_to_buy
   end
+
+  def calculate_total_amount sets_of_books
+    (sets_of_books[0] + sets_of_books[1]*0.95*2 + sets_of_books[2]*0.90*3 + 
+      sets_of_books[3]*0.80*4 + sets_of_books[4]*0.75*5)*BOOK_PRICE
+  end
+
+end
+
+class Packages_selector
 
   def count_different_books books_list_to_buy
     different_books_counter = 0
@@ -60,28 +68,21 @@ class Potter_shopping_basket
         different_books_counter += 1
       end
     end
-    return different_books_counter
+    different_books_counter
   end
 
-
-  def calculate_total_amount sets_of_books
-    (sets_of_books[0] + sets_of_books[1]*0.95*2 + sets_of_books[2]*0.90*3 + sets_of_books[3]*0.80*4 + sets_of_books[4]*0.75*5)*BOOK_PRICE
-  end
-
-
-  def create_books_packages_with_highest_total_discount books_list_to_buy, different_books_counter
+  def create_books_packages_with_highest_total_discount books_list_to_buy
     sets_of_books = [0,0,0,0,0]
 
+    different_books_counter = count_different_books books_list_to_buy
+
     while different_books_counter != 0
-      empty_list = []
       if different_books_counter == 1
         sets_of_books[0] = books_list_to_buy[0]
         different_books_counter = 0
       else
         books_list_to_buy = pick_set_of_books books_list_to_buy
-
-        sets_of_books[(different_books_counter.to_i-1).to_i]=((sets_of_books[different_books_counter-1].to_i)+1).to_i
-        
+        sets_of_books[different_books_counter-1] += 1
         different_books_counter = count_different_books books_list_to_buy
       end
     end
@@ -93,7 +94,7 @@ class Potter_shopping_basket
     end
 
     sets_of_books
-  end
+  end 
 
   def pick_set_of_books books_list_to_buy
     rest_of_books_list = []
@@ -104,13 +105,7 @@ class Potter_shopping_basket
       end
     end
 
-    return rest_of_books_list
+    rest_of_books_list
   end
 
-
 end
-
-
-
-
-
